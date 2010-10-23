@@ -10,6 +10,7 @@ URL: http://labs.consol.de/lang/de/nagios/mod-gearman/
 Packager: Mark Clarkson <ext-mark.clarkson@nokia.com>
 
 #Source: http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz
+Source: mod_gearman-0.6.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
