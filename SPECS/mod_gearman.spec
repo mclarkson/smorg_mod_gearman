@@ -33,7 +33,7 @@ install -D -m 755 etc/mod_gearman.conf ${RPM_BUILD_ROOT}%_sysconfdir/mod_gearman
 install -D -m 755 worker/initscript ${RPM_BUILD_ROOT}%_sysconfdir/init.d/mod_gearman_worker
 
 %clean
-%{__rm} -rf %{buildroot}
+#%{__rm} -rf %{buildroot}
 
 %files
 %{_libdir}/mod_gearman/neb/mod_gearman.o
