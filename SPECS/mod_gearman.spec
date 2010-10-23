@@ -37,6 +37,9 @@ install -D -m 755 worker/initscript ${RPM_BUILD_ROOT}%_sysconfdir/init.d/mod_gea
 
 %files
 %{_libdir}/mod_gearman/neb/mod_gearman.o
+%{_bindir}/mod_gearman_worker
+%{_sysconfdir}/mod_gearman.conf
+%{_sysconfdir}/init.d/mod_gearman_worker
 
 %post
 /sbin/chkconfig --add mod_gearman_worker
