@@ -28,12 +28,18 @@ Mod Gearman is a new way of distributing active Nagios checks across your networ
 [ "$RPM_BUILD_ROOT" != "/" ] && %{__rm} -rf %{buildroot}
 #%{__make} install  DESTDIR="%{buildroot}" AM_INSTALL_PROGRAM_FLAGS=""
 install -D -m 755 mod_gearman.o ${RPM_BUILD_ROOT}%_libdir/mod_gearman/neb/mod_gearman.o
+install -D -m 755 mod_gearman_worker ${RPM_BUILD_ROOT}%_bindir/mod_gearman_worker
+install -D -m 755 etc/mod_gearman.conf ${RPM_BUILD_ROOT}%_sysconfdir/mod_gearman.conf
+install -D -m 755 worker/initscript ${RPM_BUILD_ROOT}%_sysconfdir/init.d/mod_gearman_worker
 
 %clean
 %{__rm} -rf %{buildroot}
 
 %files
 %{_libdir}/mod_gearman/neb/mod_gearman.o
+
+%post
+/sbin/chkconfig --add mod_gearman_worker
 
 %changelog
 * Sat Oct 23 2010 Mark Clarkson  <ext-mark.clarkson@nokia.com> - 0.1-1
