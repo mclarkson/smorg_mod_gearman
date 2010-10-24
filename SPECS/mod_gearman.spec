@@ -12,6 +12,7 @@ Packager: Mark Clarkson <ext-mark.clarkson@nokia.com>
 #Source: http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz
 Source: mod_gearman-0.6.tar.gz
 Patch1: log_location.patch
+Patch1: chkconfig.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description

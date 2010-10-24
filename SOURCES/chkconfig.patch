@@ -1,0 +1,28 @@
+diff -r -u mod_gearman-0.6.orig/extras/gearmand-init mod_gearman-0.6/extras/gearmand-init
+--- mod_gearman-0.6.orig/extras/gearmand-init	2010-10-13 08:04:03.000000000 +0100
++++ mod_gearman-0.6/extras/gearmand-init	2010-10-24 02:03:09.000000000 +0100
+@@ -1,5 +1,10 @@
+ #!/bin/sh
+ 
++# chkconfig: 2345 80 30
++# description: Gearman worker daemon.
++# processname: gearmand
++# config: /etc/gearmand.conf
++
+ ### BEGIN INIT INFO
+ # Provides:          gearmand
+ # Required-Start:    $local_fs
+diff -r -u mod_gearman-0.6.orig/extras/gearmand-init.in mod_gearman-0.6/extras/gearmand-init.in
+--- mod_gearman-0.6.orig/extras/gearmand-init.in	2010-10-09 00:39:57.000000000 +0100
++++ mod_gearman-0.6/extras/gearmand-init.in	2010-10-24 02:03:09.000000000 +0100
+@@ -1,5 +1,10 @@
+ #!/bin/sh
+ 
++# chkconfig: 2345 80 30
++# description: Gearman worker daemon.
++# processname: gearmand
++# config: /etc/gearmand.conf
++
+ ### BEGIN INIT INFO
+ # Provides:          gearmand
+ # Required-Start:    $local_fs
