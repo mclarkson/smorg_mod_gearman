@@ -21,7 +21,7 @@ Mod Gearman is a new way of distributing active Nagios checks across your networ
 %prep
 %setup -q
 %patch1 -p1 -b .log_location
-%patch2 -p1 -b .checkconfig
+%patch2 -p1 -b .chkconfig
 
 %configure
 
