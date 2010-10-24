@@ -1,28 +1,51 @@
 diff -r -u mod_gearman-0.6.orig/Makefile.am mod_gearman-0.6/Makefile.am
 --- mod_gearman-0.6.orig/Makefile.am	2010-10-11 03:06:16.000000000 +0100
-+++ mod_gearman-0.6/Makefile.am	2010-10-24 02:37:39.000000000 +0100
++++ mod_gearman-0.6/Makefile.am	2010-10-24 02:50:55.000000000 +0100
 @@ -59,8 +59,8 @@
  
  
  replace_vars = sed 's:%CONFIG%:$(DESTDIR)$(sysconfdir)/mod_gearman.conf:g' | \
 -               sed 's:%PIDFILE%:$(DESTDIR)$(localstatedir)/mod_gearman/mod_gearman_worker.pid:g' | \
 -               sed 's:%LOGFILE%:$(DESTDIR)$(localstatedir)/mod_gearman/mod_gearman_worker.log:g' | \
-+               sed 's:%PIDFILE%:$(DESTDIR)$(localstatedir)/log/mod_gearman_worker.pid:g' | \
++               sed 's:%PIDFILE%:$(DESTDIR)$(localstatedir)/run/mod_gearman_worker.pid:g' | \
 +               sed 's:%LOGFILE%:$(DESTDIR)$(localstatedir)/log/mod_gearman_worker.log:g' | \
                 sed 's:%WORKERBIN%:$(DESTDIR)$(bindir)/mod_gearman_worker:g' | \
                 sed 's:%USER%:$(user):g'
  
 diff -r -u mod_gearman-0.6.orig/Makefile.in mod_gearman-0.6/Makefile.in
 --- mod_gearman-0.6.orig/Makefile.in	2010-10-11 06:07:12.000000000 +0100
-+++ mod_gearman-0.6/Makefile.in	2010-10-24 02:38:00.000000000 +0100
++++ mod_gearman-0.6/Makefile.in	2010-10-24 02:50:55.000000000 +0100
 @@ -269,8 +269,8 @@
  01_utils_SOURCES = $(common_SOURCES) t/tap.h t/tap.c worker/worker_logger.c t/01-utils.c
  02_full_SOURCES = $(common_SOURCES) t/tap.h t/tap.c worker/worker_logger.c t/02-full.c
  replace_vars = sed 's:%CONFIG%:$(DESTDIR)$(sysconfdir)/mod_gearman.conf:g' | \
 -               sed 's:%PIDFILE%:$(DESTDIR)$(localstatedir)/mod_gearman/mod_gearman_worker.pid:g' | \
 -               sed 's:%LOGFILE%:$(DESTDIR)$(localstatedir)/mod_gearman/mod_gearman_worker.log:g' | \
-+               sed 's:%PIDFILE%:$(DESTDIR)$(localstatedir)/log/mod_gearman_worker.pid:g' | \
++               sed 's:%PIDFILE%:$(DESTDIR)$(localstatedir)/run/mod_gearman_worker.pid:g' | \
 +               sed 's:%LOGFILE%:$(DESTDIR)$(localstatedir)/log/mod_gearman_worker.log:g' | \
                 sed 's:%WORKERBIN%:$(DESTDIR)$(bindir)/mod_gearman_worker:g' | \
                 sed 's:%USER%:$(user):g'
  
+diff -r -u mod_gearman-0.6.orig/worker/initscript.in mod_gearman-0.6/worker/initscript.in
+--- mod_gearman-0.6.orig/worker/initscript.in	2010-10-09 00:39:57.000000000 +0100
++++ mod_gearman-0.6/worker/initscript.in	2010-10-24 02:49:53.000000000 +0100
+@@ -1,5 +1,10 @@
+ #!/bin/sh
+ 
++# chkconfig: 2345 80 30
++# description: Mod-gearman worker daemon.
++# processname: mod_gearman_worker
++# config: /etc/gearmand.conf
++
+ ### BEGIN INIT INFO
+ # Provides:          mod_gearman_worker
+ # Required-Start:    $local_fs
+@@ -14,7 +19,7 @@
+ 
+ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+ DAEMON=%WORKERBIN%
+-NAME=mod_gm_worker
++NAME=mod_gearman_worker
+ CONFIG=%CONFIG%
+ PIDFILE=%PIDFILE%
+ USER=%USER%
