@@ -1,0 +1,14 @@
+diff -r -u mod_gearman-0.6.orig/Makefile.am mod_gearman-0.6/Makefile.am
+--- mod_gearman-0.6.orig/Makefile.am	2010-10-11 03:06:16.000000000 +0100
++++ mod_gearman-0.6/Makefile.am	2010-10-24 01:54:09.000000000 +0100
+@@ -59,8 +59,8 @@
+ 
+ 
+ replace_vars = sed 's:%CONFIG%:$(DESTDIR)$(sysconfdir)/mod_gearman.conf:g' | \
+-               sed 's:%PIDFILE%:$(DESTDIR)$(localstatedir)/mod_gearman/mod_gearman_worker.pid:g' | \
+-               sed 's:%LOGFILE%:$(DESTDIR)$(localstatedir)/mod_gearman/mod_gearman_worker.log:g' | \
++               sed 's:%PIDFILE%:$(DESTDIR)$(localstatedir)/log/mod_gearman_worker.pid:g' | \
++               sed 's:%LOGFILE%:$(DESTDIR)$(localstatedir)/log/mod_gearman_worker.log:g' | \
+                sed 's:%WORKERBIN%:$(DESTDIR)$(bindir)/mod_gearman_worker:g' | \
+                sed 's:%USER%:$(user):g'
+ 
