@@ -50,7 +50,7 @@ install -d -m 755 ${RPM_BUILD_ROOT}/var/mod_gearman
 %{_bindir}/check_gearman
 %{_sysconfdir}/mod_gearman.conf
 %{_sysconfdir}/init.d/mod_gearman_worker
-%defattr(755,%{nagios},%{root})
+%defattr(755,nagios,root)
 %dir /var/mod_gearman
 
 %post
