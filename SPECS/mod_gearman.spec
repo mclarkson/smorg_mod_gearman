@@ -37,6 +37,7 @@ install -D -m 755 gearman_top ${RPM_BUILD_ROOT}%_bindir/gearman_top
 install -D -m 755 send_gearman ${RPM_BUILD_ROOT}%_bindir/send_gearman
 # check_gearman is a nagios check but useful on its own any way
 install -D -m 755 check_gearman ${RPM_BUILD_ROOT}%_bindir/check_gearman
+install -d -m 755 check_gearman ${RPM_BUILD_ROOT}/mod_gearman
 
 %clean
 #%{__rm} -rf %{buildroot}
@@ -49,6 +50,8 @@ install -D -m 755 check_gearman ${RPM_BUILD_ROOT}%_bindir/check_gearman
 %{_bindir}/check_gearman
 %{_sysconfdir}/mod_gearman.conf
 %{_sysconfdir}/init.d/mod_gearman_worker
+%defattr(755,%{nagios},%{root})
+%dir /var/mod_gearman
 
 %post
 /sbin/chkconfig --add mod_gearman_worker
