@@ -11,8 +11,8 @@ Packager: Mark Clarkson <ext-mark.clarkson@nokia.com>
 
 #Source: http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz
 Source: mod_gearman-0.6.tar.gz
-Patch1: log_location.patch
-Patch2: chkconfig.patch
+Patch1: mod_gearman-0.6-log_location.patch
+Patch2: mod_gearman-0.6-chkconfig.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -20,6 +20,8 @@ Mod Gearman is a new way of distributing active Nagios checks across your networ
 
 %prep
 %setup -q
+%patch1 -p1 -b .log_location
+%patch2 -p1 -b .checkconfig
 
 %configure
 
