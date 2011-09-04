@@ -1,17 +1,17 @@
 Summary: Mod Gearman Nagios NEB module
 Name: mod_gearman
-Version: 0.6
+Version: 1.0.10
 Release: 1
 License: BSD
 Group: System Environment/Libraries
 BuildRequires: gcc-c++
 URL: http://labs.consol.de/lang/de/nagios/mod-gearman/
 
-Packager: Mark Clarkson <ext-mark.clarkson@nokia.com>
+Packager: Mark Clarkson <mark.clarkson@smorg.co.uk>
 
 #Source: http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz
-Source: mod_gearman-0.6.tar.gz
-Patch1: mod_gearman-0.6-rpmfixes.patch
+Source: mod_gearman-1.0.10.tar.gz
+Patch1: mod_gearman-1.0.10-rpmfixes.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -57,5 +57,8 @@ install -d -m 755 ${RPM_BUILD_ROOT}/var/mod_gearman
 /sbin/chkconfig --add mod_gearman_worker
 
 %changelog
-* Sat Oct 23 2010 Mark Clarkson  <ext-mark.clarkson@nokia.com> - 0.1-1
+* Tue Sep 06 2011 Mark Clarkson  <mark.clarkson@smorg.co.uk> - 0.2-1
+- Upgraded to upstream 1.0.10
+
+* Sat Oct 23 2010 Mark Clarkson  <mark.clarkson@smorg.co.uk> - 0.1-1
 - Initial package
