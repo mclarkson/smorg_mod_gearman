@@ -10,7 +10,7 @@ Group:         Applications/Monitoring
 BuildRoot:     %{_tmppath}/%{name}-%{version}-root-%(%{__id_u} -n)
 BuildRequires: autoconf, automake, ncurses-devel
 BuildRequires: libtool, libtool-ltdl-devel, libevent-devel
-BuildRequires: gearmand-devel
+#BuildRequires: gearmand-devel
 Summary:       Gearman module for Icinga/Nagios
 Requires(pre,post): /sbin/ldconfig
 Requires(pre): shadow-utils
