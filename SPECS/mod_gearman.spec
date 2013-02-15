@@ -1,64 +1,115 @@
-Summary: Mod Gearman Nagios NEB module
-Name: mod_gearman
-Version: 1.0.10
-Release: 1
-License: BSD
-Group: System Environment/Libraries
-BuildRequires: gcc-c++
-URL: http://labs.consol.de/lang/de/nagios/mod-gearman/
+Name:          mod_gearman
+Version:       1.4.2
+Release:       1%{?dist}
+License:       GNU Public License version 2
+Packager:      Sven Nierlein <sven.nierlein@consol.de>
+Vendor:        Labs Consol
+URL:           http://labs.consol.de/nagios/mod-gearman/
+Source0:       mod_gearman-%{version}.tar.gz
+Group:         Applications/Monitoring
+BuildRoot:     %{_tmppath}/%{name}-%{version}-root-%(%{__id_u} -n)
+BuildRequires: autoconf, automake, ncurses-devel
+BuildRequires: libtool, libtool-ltdl-devel, libevent-devel
+BuildRequires: gearmand-devel
+Summary:       Gearman module for Icinga/Nagios
+Requires(pre,post): /sbin/ldconfig
+Requires(pre): shadow-utils
+Requires:      gearmand, perl, logrotate
 
-Packager: Mark Clarkson <mark.clarkson@smorg.co.uk>
-
-#Source: http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz
-Source: mod_gearman-1.0.10.tar.gz
-Patch1: mod_gearman-1.0.10-rpmfixes.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Provides:      mod_gearman
 
 %description
-Mod Gearman is a new way of distributing active Nagios checks across your network. It consists of two parts: There is a NEB module which resides in the Nagios core and adds servicechecks, hostchecks and eventhandler to a Gearman queue. There can be multiple equal gearman servers. The counterpart is one or more worker clients for the checks itself. They can be bound to host and servicegroups.
+Mod Gearman is a new way of distributing active Nagios/Icinga
+checks across your network. It consists of two parts: There is
+a NEB module which resides in the Nagios/Icinga core and adds
+servicechecks, hostchecks and eventhandler to a Gearman queue.
+There can be multiple equal gearman servers. The counterpart
+is one or more worker clients for the checks itself. They can
+be bound to host and servicegroups.
 
 %prep
 %setup -q
-%patch1 -p1 -b .rpmfixes
-%configure
+[ -f ./configure ] || ./autogen.sh
 
 %build
+%configure \
+     --datadir="%{_datadir}" \
+     --datarootdir="%{_datadir}" \
+     --localstatedir="%{_localstatedir}" \
+     --sysconfdir="%{_sysconfdir}/mod_gearman" \
+     --with-init-dir="%{_initrddir}" \
+     --enable-embedded-perl
+
 %{__make} %{_smp_mflags}
 
 %install
-[ "$RPM_BUILD_ROOT" != "/" ] && %{__rm} -rf %{buildroot}
-#%{__make} install  DESTDIR="%{buildroot}" AM_INSTALL_PROGRAM_FLAGS=""
-install -D -m 755 mod_gearman.o ${RPM_BUILD_ROOT}%_libdir/mod_gearman/neb/mod_gearman.o
-install -D -m 755 mod_gearman_worker ${RPM_BUILD_ROOT}%_bindir/mod_gearman_worker
-install -D -m 755 etc/mod_gearman.conf ${RPM_BUILD_ROOT}%_sysconfdir/mod_gearman.conf
-install -D -m 755 worker/initscript ${RPM_BUILD_ROOT}%_sysconfdir/init.d/mod_gearman_worker
-install -D -m 755 gearman_top ${RPM_BUILD_ROOT}%_bindir/gearman_top
-# send_gearman is like send_nsca
-install -D -m 755 send_gearman ${RPM_BUILD_ROOT}%_bindir/send_gearman
-# check_gearman is a nagios check but useful on its own any way
-install -D -m 755 check_gearman ${RPM_BUILD_ROOT}%_bindir/check_gearman
-install -d -m 755 ${RPM_BUILD_ROOT}/var/mod_gearman
+%{__rm} -rf %{buildroot}
+%{__make} install \
+     install-config \
+     DESTDIR="%{buildroot}" \
+     AM_INSTALL_PROGRAM_FLAGS=""
+
+# remove custom gearmand initscript
+%{__rm} -f %{buildroot}/%{_initrddir}/gearmand
+
+
+%pre
+getent group nagios >/dev/null || groupadd -r nagios
+getent passwd nagios >/dev/null || \
+    useradd -r -g nagios -d %{_localstatedir}/mod_gearman -s /sbin/nologin \
+    -c "nagios user" nagios
+exit 0
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
 
 %clean
-#%{__rm} -rf %{buildroot}
+%{__rm} -rf %{buildroot}
 
 %files
-%{_libdir}/mod_gearman/neb/mod_gearman.o
-%{_bindir}/mod_gearman_worker
-%{_bindir}/gearman_top
-%{_bindir}/send_gearman
-%{_bindir}/check_gearman
-%{_sysconfdir}/mod_gearman.conf
-%{_sysconfdir}/init.d/mod_gearman_worker
-%defattr(755,nagios,root)
-%dir /var/mod_gearman
+%attr(755,root,root) %{_initrddir}/mod_gearman_worker
+%config(noreplace) %{_sysconfdir}/mod_gearman/mod_gearman_neb.conf
+%config(noreplace) %{_sysconfdir}/mod_gearman/mod_gearman_worker.conf
+%config(noreplace) %{_sysconfdir}/logrotate.d/mod_gearman_worker
 
-%post
-/sbin/chkconfig --add mod_gearman_worker
+%{_datadir}/mod_gearman/standalone_worker.conf
+%{_datadir}/mod_gearman/shared.conf
+%{_datadir}/mod_gearman/mod_gearman_p1.pl
+%{_datadir}/mod_gearman/gearman_proxy.pl
+
+%{_bindir}/check_gearman
+%{_bindir}/gearman_top
+%{_bindir}/mod_gearman_worker
+%{_bindir}/send_gearman
+%{_bindir}/send_multi
+
+%{_libdir}/mod_gearman/mod_gearman.o
+
+%attr(755,nagios,root) %{_localstatedir}/mod_gearman
+%attr(755,nagios,root) %{_localstatedir}/log/mod_gearman
+
+%defattr(-,root,root)
+%docdir %{_defaultdocdir}
 
 %changelog
-* Tue Sep 06 2011 Mark Clarkson  <mark.clarkson@smorg.co.uk> - 0.2-1
-- Upgraded to upstream 1.0.10
+* Mon Nov 19 2012 Ricardo Maraschini <ricardo.maraschini@opservices.com.br>
+- added logrotate configuration file
 
-* Sat Oct 23 2010 Mark Clarkson  <mark.clarkson@smorg.co.uk> - 0.1-1
-- Initial package
+* Fri Apr 06 2012 Sven Nierlein <sven@consol.de>
+- added gearman_proxy to package
+
+* Thu Jan 19 2012 Sven Nierlein <sven@consol.de>
+- enabled embedded Perl
+
+* Mon Jun 06 2011 Michael Friedrich <michael.friedrich@univie.ac.at>
+- reworked spec file to fit fhs compliance in /etc/mod_gearman
+- moved extras/*conf from localestatedir to sysconfdir
+- added config noreplace to config targets
+- removed custom gearmand init script, interferes with gearmand dependency on rhel
+
+* Fri Feb 11 2011 Sven Nierlein <sven@consol.de>
+- Adapted spec file for SLES11
+
+* Wed Oct 13 2010 Olivier Raginel <babar@cern.ch>
+- First build, on Scientific Linux CERN 5.5
