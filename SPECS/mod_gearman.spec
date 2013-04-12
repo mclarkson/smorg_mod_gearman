@@ -14,7 +14,7 @@ BuildRequires: libtool, libtool-ltdl-devel, libevent-devel
 Summary:       Gearman module for Icinga/Nagios
 Requires(pre,post): /sbin/ldconfig
 Requires(pre): shadow-utils
-Requires:      gearmand, perl, logrotate
+Requires:      smorg-gearmand, perl, logrotate
 
 Provides:      mod_gearman
 
