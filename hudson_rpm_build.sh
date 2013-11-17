@@ -21,6 +21,10 @@ for DIR in SOURCES SPECS; do
         fi 
 done
 
+echo
+ls -lh
+echo
+
 . POINTRELEASE
 
 rm -rf TMP
