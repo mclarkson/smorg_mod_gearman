@@ -21,9 +21,11 @@ for DIR in SOURCES SPECS; do
         fi 
 done
 
-echo
+echo ----
 ls -lh
-echo
+echo ----
+cat POINTRELEASE
+echo ----
 
 . POINTRELEASE
 
